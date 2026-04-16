@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Innogen SSO Demo</title>
+    <style>
+      .sso-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        background: #fff;
+        cursor: pointer;
+        font: inherit;
+      }
+      .sso-btn:hover {
+        background: #f8fafc;
+      }
+      .sso-icon {
+        width: 18px;
+        height: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Innogen SSO Demo</h1>
+
+    <label>
+      Email
+      <input id="email" type="email" placeholder="name@innogen-pharma.com" />
+    </label>
+    <button id="continue">Continue</button>
+
+    <div id="actions" style="margin-top: 16px"></div>
+
+    <div style="margin-top: 24px">
+      <button id="check">Verify Session</button>
+      <pre id="session"></pre>
+    </div>
+
+    <script src="basic.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SSO Callback</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+        color: #1f2937;
+        background:
+          radial-gradient(circle at top left, rgba(15, 118, 110, 0.18), transparent 30%),
+          linear-gradient(180deg, #f8f4ec 0%, #f3efe7 100%);
+      }
+
+      .card {
+        width: min(760px, 100%);
+        padding: 28px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(31, 41, 55, 0.12);
+        box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
+      }
+
+      h1,
+      p,
+      pre {
+        margin: 0;
+      }
+
+      .muted {
+        color: #667085;
+      }
+
+      .note {
+        margin-top: 18px;
+        padding: 16px 18px;
+        border-left: 4px solid #0f766e;
+        border-radius: 14px;
+        background: rgba(15, 118, 110, 0.08);
+        color: #516072;
+      }
+
+      pre {
+        margin-top: 18px;
+        padding: 18px;
+        overflow: auto;
+        border-radius: 20px;
+        background: #0b1324;
+        color: #e5eefc;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1>Checking SSO session...</h1>
+      <p class="muted" id="hint" style="margin-top: 10px;">Verifying the session cookie from the SSO domain.</p>
+      <pre id="out">Waiting for /api/v1/verify-session...</pre>
+      <div class="note">
+        Replace <code>/api/session/sso-login</code> and <code>APP_DEFAULT_REDIRECT</code> below with your app's own
+        session endpoint and real post-login page. The safe default here is <code>/</code>.
+      </div>
+    </main>
+
+    <script>
+      const SSO_BASE = "https://sso.innogen-pharma.com";
+      const APP_DEFAULT_REDIRECT = "/"; // Change this to your app's real post-login page if needed.
+
+      async function verify() {
+        const output = document.getElementById("out");
+        const hint = document.getElementById("hint");
+
+        try {
+          const verifyResponse = await fetch(`${SSO_BASE}/api/v1/verify-session`, {
+            method: "GET",
+            credentials: "include"
+          });
+          const data = await verifyResponse.json().catch(() => null);
+          output.textContent = JSON.stringify(data, null, 2);
+
+          if (!data || !data.authenticated) {
+            hint.textContent = "Not authenticated. Redirecting back to your login page.";
+            window.location.href = "/login";
+            return;
+          }
+
+          hint.textContent = "Authenticated. Creating your app session.";
+
+          await fetch("/api/session/sso-login", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ user: data.user })
+          });
+
+          window.location.href = APP_DEFAULT_REDIRECT;
+        } catch (error) {
+          output.textContent = String(error);
+          hint.textContent = "Callback failed. Check your app route and backend session endpoint.";
+        }
+      }
+
+      verify();
+    </script>
+  </body>
+</html>

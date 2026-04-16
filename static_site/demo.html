@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Innogen SSO Demo</title>
+    <style>
+      :root {
+        --bg: #f3efe7;
+        --surface: rgba(255, 255, 255, 0.88);
+        --surface-strong: #fffdf8;
+        --text: #1f2937;
+        --muted: #5f6b7a;
+        --line: rgba(31, 41, 55, 0.12);
+        --accent: #0f766e;
+        --accent-strong: #115e59;
+        --accent-soft: #dff5f2;
+        --ink: #0b1324;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(15, 118, 110, 0.18), transparent 30%),
+          radial-gradient(circle at top right, rgba(245, 158, 11, 0.15), transparent 28%),
+          linear-gradient(180deg, #f8f4ec 0%, var(--bg) 100%);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .page {
+        width: min(1120px, calc(100vw - 32px));
+        margin: 32px auto;
+      }
+
+      .hero,
+      .section {
+        background: var(--surface);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
+      }
+
+      .hero {
+        padding: 32px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: auto -80px -80px auto;
+        width: 240px;
+        height: 240px;
+        border-radius: 999px;
+        background: rgba(15, 118, 110, 0.08);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        margin-top: 18px;
+        font-size: clamp(2rem, 4vw, 3.6rem);
+        line-height: 1.02;
+        max-width: 760px;
+      }
+
+      .lead {
+        margin-top: 16px;
+        max-width: 760px;
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 0.9fr;
+        gap: 24px;
+        margin-top: 26px;
+      }
+
+      .panel {
+        background: rgba(255, 255, 255, 0.74);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 22px;
+      }
+
+      .panel h2 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+      }
+
+      .button-row,
+      .meta,
+      .chips,
+      .flow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .demo-btn,
+      .link-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 48px;
+        padding: 12px 18px;
+        border-radius: 14px;
+        border: 1px solid transparent;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+        cursor: pointer;
+      }
+
+      .demo-btn {
+        color: white;
+        background: linear-gradient(135deg, var(--accent) 0%, #155e75 100%);
+        box-shadow: 0 14px 30px rgba(17, 94, 89, 0.22);
+      }
+
+      .link-btn {
+        color: var(--text);
+        background: var(--surface-strong);
+        border-color: var(--line);
+      }
+
+      .demo-btn:hover,
+      .link-btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .demo-btn img {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        background: white;
+      }
+
+      .chips span {
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.86);
+        border: 1px solid var(--line);
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .meta {
+        margin-top: 18px;
+      }
+
+      .meta div {
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid var(--line);
+      }
+
+      .meta strong {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 3px;
+      }
+
+      .section {
+        margin-top: 24px;
+        padding: 28px;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: end;
+        margin-bottom: 18px;
+      }
+
+      .section-head p {
+        color: var(--muted);
+        max-width: 760px;
+      }
+
+      .flow {
+        margin-top: 18px;
+      }
+
+      .flow-card {
+        flex: 1 1 230px;
+        padding: 20px;
+        border-radius: 22px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.9));
+        border: 1px solid var(--line);
+      }
+
+      .flow-card strong {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        margin-bottom: 14px;
+        border-radius: 10px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+      }
+
+      .flow-card p {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      pre {
+        margin: 0;
+        overflow: auto;
+        padding: 18px;
+        border-radius: 20px;
+        background: var(--ink);
+        color: #e5eefc;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      code {
+        font-family: Consolas, "SFMono-Regular", monospace;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .note {
+        margin-top: 16px;
+        padding: 16px 18px;
+        border-left: 4px solid var(--accent);
+        border-radius: 14px;
+        background: rgba(15, 118, 110, 0.08);
+        color: var(--muted);
+      }
+
+      .mini {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .field-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .field-help {
+        margin-bottom: 12px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .callback-input {
+        width: 100%;
+        min-height: 48px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.95);
+        font: inherit;
+        color: var(--text);
+      }
+
+      @media (max-width: 840px) {
+        .hero-grid,
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .page {
+          width: min(100vw - 20px, 1120px);
+          margin: 10px auto 24px;
+        }
+
+        .hero,
+        .section {
+          padding: 22px;
+          border-radius: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <span class="eyebrow">Developer Demo</span>
+        <h1>See how another web app should launch and receive Innogen SSO.</h1>
+        <p class="lead">
+          This page is the live reference for partners integrating with
+          <code>https://sso.innogen-pharma.com</code>. It shows the exact redirect pattern, callback check, and the
+          button treatment you can reuse in your own product.
+        </p>
+
+        <div class="hero-grid">
+          <div class="panel">
+            <h2>Live entry button</h2>
+            <label class="field-label" for="returnToInput">Callback URL to test</label>
+            <div class="field-help">
+              When the user clicks <code>Continue with Innogen</code>, send them to
+              <code>https://sso.innogen-pharma.com/login?return_to=...</code> where <code>return_to</code> is your
+              app's callback page, not your homepage.
+            </div>
+            <input
+              id="returnToInput"
+              class="callback-input"
+              type="url"
+              value="https://clearance.innogen.local/sso_callback.html"
+              spellcheck="false"
+            />
+            <div class="button-row">
+              <button id="continueBtn" class="demo-btn" type="button">
+                <img src="/static/favicon.png" alt="Innogen" />
+                Continue with Innogen
+              </button>
+              <a id="openHostedLogin" class="link-btn" href="/login?return_to=%2Fcallback">Open hosted login</a>
+            </div>
+            <div class="meta">
+              <div>
+                <strong>Logo asset</strong>
+                <span class="mini"><code>https://sso.innogen-pharma.com/static/favicon.png</code></span>
+              </div>
+              <div>
+                <strong>Redirect format</strong>
+                <span class="mini"><code>https://sso.innogen-pharma.com/login?return_to=&lt;your-app-callback&gt;</code></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>What this demonstrates</h2>
+            <div class="chips">
+              <span>Hosted login page</span>
+              <span>Cross-site session cookie</span>
+              <span>Return URL redirect</span>
+              <span>Session verification</span>
+            </div>
+            <div class="note">
+              Use your callback page in <code>return_to</code>. After the SSO flow completes, that callback page should
+              call <code>/api/v1/verify-session</code> with <code>credentials: "include"</code>.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Integration flow</h2>
+            <p>These are the only three moving parts the consuming app needs to understand.</p>
+          </div>
+        </div>
+        <div class="flow">
+          <article class="flow-card">
+            <strong>1</strong>
+            <h3>Start on your app</h3>
+            <p>Render a "Continue with Innogen" button and redirect to the hosted login page with your callback page URL.</p>
+          </article>
+          <article class="flow-card">
+            <strong>2</strong>
+            <h3>User signs in at SSO</h3>
+            <p>The hosted page detects the method, handles Google or app password, then sets the SSO cookie.</p>
+          </article>
+          <article class="flow-card">
+            <strong>3</strong>
+            <h3>Return and verify</h3>
+            <p>Your callback page calls the SSO verify endpoint, reads the authenticated user, and continues your app flow.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Snippet: launch the hosted login</h2>
+            <p>Embed this in the consuming application where the user begins sign-in. The <code>return_to</code> value should be your callback page.</p>
+          </div>
+        </div>
+        <pre><code>&lt;button id="continueWithInnogen" type="button"&gt;
+  &lt;img src="https://sso.innogen-pharma.com/static/favicon.png" alt="Innogen" /&gt;
+  Continue with Innogen
+&lt;/button&gt;
+
+&lt;script&gt;
+  const SSO_BASE = "https://sso.innogen-pharma.com";
+  const returnTo = window.location.origin + "/sso-callback.html"; // your callback page
+
+  document.getElementById("continueWithInnogen").addEventListener("click", () =&gt; {
+    window.location.href = `${SSO_BASE}/login?return_to=${encodeURIComponent(returnTo)}`;
+  });
+&lt;/script&gt;</code></pre>
+        <p class="note">
+          If you pass your homepage instead of a callback page, that page itself must still run the session verification logic. The usual setup is a dedicated callback route such as <code>/sso-callback.html</code>.
+        </p>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Snippet: callback verification</h2>
+            <p>Your callback page should verify the Innogen cookie and then create or refresh your own app session.</p>
+          </div>
+          <div class="button-row">
+            <a class="link-btn" href="/callback">Open live callback page</a>
+            <a class="link-btn" href="/demo-assets/static/sso-callback.html" download="sso-callback.html">Download sso-callback.html</a>
+          </div>
+        </div>
+        <div class="grid">
+          <pre><code>&lt;script&gt;
+  const SSO_BASE = "https://sso.innogen-pharma.com";
+
+  fetch(`${SSO_BASE}/api/v1/verify-session`, {
+    method: "GET",
+    credentials: "include"
+  })
+    .then((response) =&gt; response.json())
+    .then((data) =&gt; {
+      if (!data.authenticated) {
+        window.location.href = "/login.html";
+        return;
+      }
+
+      console.log("SSO user:", data.user);
+      // Create or refresh your own app session here.
+    });
+&lt;/script&gt;</code></pre>
+          <pre><code>{
+  "authenticated": true,
+  "user": {
+    "email": "name@innogen-pharma.com",
+    "domain": "innogen-pharma.com"
+  }
+}</code></pre>
+        </div>
+        <p class="note">
+          Your callback URL must be an allowed host under <code>innogen-pharma.com</code>, <code>innogen-pharma.ph</code>,
+          or <code>innogen.local</code>. Local development can use HTTP only for <code>*.innogen.local</code>.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      const returnToInput = document.getElementById("returnToInput");
+      const openHostedLogin = document.getElementById("openHostedLogin");
+
+      function getReturnToValue() {
+        const value = (returnToInput.value || "").trim();
+        return value || `${window.location.origin}/callback`;
+      }
+
+      function updateOpenHostedLogin() {
+        openHostedLogin.href = `/login?return_to=${encodeURIComponent(getReturnToValue())}`;
+      }
+
+      returnToInput.addEventListener("input", updateOpenHostedLogin);
+      updateOpenHostedLogin();
+
+      document.getElementById("continueBtn").addEventListener("click", () => {
+        window.location.href = `/login?return_to=${encodeURIComponent(getReturnToValue())}`;
+      });
+    </script>
+  </body>
+</html>

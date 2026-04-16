@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SSO Callback</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <h1>Checking session…</h1>
+      <pre id="out" class="panel"></pre>
+      <p class="muted small" id="hint"></p>
+    </main>
+
+    <script>
+      const SSO_BASE = "https://sso.innogen-pharma.com";
+
+      async function verify() {
+        const res = await fetch(`${SSO_BASE}/api/v1/verify-session`, { credentials: "include" });
+        const data = await res.json().catch(() => null);
+        document.getElementById("out").textContent = JSON.stringify(data, null, 2);
+
+        if (data && data.authenticated) {
+          localStorage.setItem("innogen_user", JSON.stringify(data.user));
+          document.getElementById("hint").textContent = "Authenticated. Redirecting…";
+          window.location.href = "./";
+          return;
+        }
+
+        document.getElementById("hint").textContent = "Not authenticated. Redirecting to login…";
+        window.location.href = "./login.html";
+      }
+
+      verify();
+    </script>
+  </body>
+</html>
+

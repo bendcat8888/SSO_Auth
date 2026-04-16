@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - Innogen SSO</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <h1>Sign in</h1>
+      <p class="muted">Use Innogen Universal SSO to continue.</p>
+
+      <button class="innogen-btn" id="innogenBtn" type="button">
+        <img class="innogen-icon" src="./static/favicon.png" alt="InnoGen" />
+        Continue with InnoGen
+      </button>
+
+      <p class="muted small">
+        This is a template. Put your logo at <span class="mono">./static/favicon.png</span>.
+      </p>
+    </main>
+
+    <script>
+      const SSO_BASE = "https://sso.innogen-pharma.com";
+
+      function buildReturnTo() {
+        const url = new URL(window.location.href);
+        url.pathname = url.pathname.replace(/\/[^/]*$/, "/sso-callback.html");
+        url.search = "";
+        url.hash = "";
+        return url.toString();
+      }
+
+      document.getElementById("innogenBtn").addEventListener("click", () => {
+        const returnTo = encodeURIComponent(buildReturnTo());
+        window.location.href = `${SSO_BASE}/login?return_to=${returnTo}`;
+      });
+    </script>
+  </body>
+</html>
+

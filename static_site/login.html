@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Innogen SSO Login</title>
+    <style>
+      :root {
+        --bg: #f3efe7;
+        --surface: rgba(255, 255, 255, 0.9);
+        --text: #1f2937;
+        --muted: #667085;
+        --line: rgba(31, 41, 55, 0.12);
+        --accent: #0f766e;
+        --accent-dark: #115e59;
+        --danger: #b42318;
+        --success: #027a48;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(15, 118, 110, 0.18), transparent 30%),
+          linear-gradient(180deg, #f8f4ec 0%, var(--bg) 100%);
+      }
+
+      .card {
+        width: min(560px, 100%);
+        padding: 28px;
+        border-radius: 28px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
+      }
+
+      .brand {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .brand img {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: white;
+      }
+
+      h1,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      label {
+        display: block;
+        margin: 16px 0 8px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      input {
+        width: 100%;
+        min-height: 48px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.95);
+        font: inherit;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      button,
+      .link-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 46px;
+        padding: 10px 16px;
+        border-radius: 14px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      button img {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 18px;
+      }
+
+      button {
+        color: white;
+        background: linear-gradient(135deg, var(--accent) 0%, #155e75 100%);
+      }
+
+      .secondary,
+      .link-btn {
+        color: var(--text);
+        background: white;
+        border-color: var(--line);
+      }
+
+      .hide {
+        display: none;
+      }
+
+      .pill {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .msg {
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 14px;
+      }
+
+      .err {
+        color: var(--danger);
+        background: rgba(180, 35, 24, 0.08);
+        border: 1px solid rgba(180, 35, 24, 0.14);
+      }
+
+      .ok {
+        color: var(--success);
+        background: rgba(2, 122, 72, 0.08);
+        border: 1px solid rgba(2, 122, 72, 0.14);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <div class="brand">
+        <img src="/static/favicon.png" alt="Innogen" />
+        <div>
+          <h1>Innogen SSO</h1>
+          <p class="muted">Enter your company email to continue.</p>
+        </div>
+      </div>
+
+      <form id="emailForm">
+        <label for="email">Company email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required placeholder="name@innogen-pharma.com" />
+        <div class="row">
+          <button type="submit">Next</button>
+          <a class="link-btn" href="/demo.html">View integration guide</a>
+        </div>
+      </form>
+
+      <section id="choices" class="hide">
+        <p class="muted">Detected methods</p>
+        <div id="methods" class="pill"></div>
+        <div class="row">
+          <button id="googleBtn" type="button" class="secondary">
+            <img src="/static/google.svg" alt="" />
+            Continue with Google
+          </button>
+          <button id="appleBtn" type="button" class="secondary">
+            <img src="/static/apple.svg" alt="" />
+            Continue with Apple
+          </button>
+        </div>
+      </section>
+
+      <section id="pwBox" class="hide">
+        <p class="muted" style="margin-top: 16px;">For <strong>innogen-pharma.ph</strong> mailboxes, use an app password.</p>
+        <form id="pwForm">
+          <label for="password" id="pwLabel">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+          <div class="row">
+            <button id="pwSubmit" type="submit">Continue</button>
+            <button id="changeEmail" type="button" class="secondary">Change email</button>
+          </div>
+        </form>
+      </section>
+
+      <div id="msgErr" class="msg err hide"></div>
+      <div id="msgOk" class="msg ok hide"></div>
+
+      <p class="muted" style="margin-top: 18px;">
+        return_to:
+        <span id="returnTo" class="pill"></span>
+      </p>
+    </main>
+
+    <script>
+      const qs = new URLSearchParams(window.location.search);
+      const returnToRaw = qs.get("return_to") || "";
+      document.getElementById("returnTo").textContent = returnToRaw || "(none)";
+
+      const allowedSuffixes = [".innogen-pharma.com", ".innogen-pharma.ph", ".innogen.local"];
+
+      function isAllowedReturnTo(urlStr) {
+        if (!urlStr) return false;
+        if (urlStr.startsWith("/")) return true;
+        try {
+          const url = new URL(urlStr);
+          if (url.protocol === "https:") {
+            return allowedSuffixes.some((suffix) => url.hostname === suffix.slice(1) || url.hostname.endsWith(suffix));
+          }
+          if (url.protocol === "http:") {
+            return url.hostname === "innogen.local" || url.hostname.endsWith(".innogen.local");
+          }
+          return false;
+        } catch {
+          return false;
+        }
+      }
+
+      const returnTo = isAllowedReturnTo(returnToRaw) ? returnToRaw : "";
+
+      function showErr(message) {
+        const el = document.getElementById("msgErr");
+        el.textContent = message;
+        el.classList.remove("hide");
+        document.getElementById("msgOk").classList.add("hide");
+      }
+
+      function showOk(message) {
+        const el = document.getElementById("msgOk");
+        el.textContent = message;
+        el.classList.remove("hide");
+        document.getElementById("msgErr").classList.add("hide");
+      }
+
+      function clearMsg() {
+        document.getElementById("msgErr").classList.add("hide");
+        document.getElementById("msgOk").classList.add("hide");
+      }
+
+      const emailForm = document.getElementById("emailForm");
+      const choices = document.getElementById("choices");
+      const pwBox = document.getElementById("pwBox");
+      const methodsEl = document.getElementById("methods");
+      const googleBtn = document.getElementById("googleBtn");
+      const appleBtn = document.getElementById("appleBtn");
+
+      let currentEmail = "";
+      let pwMode = "login";
+
+      function resetToEmail() {
+        clearMsg();
+        choices.classList.add("hide");
+        pwBox.classList.add("hide");
+        emailForm.classList.remove("hide");
+        document.getElementById("password").value = "";
+      }
+
+      document.getElementById("changeEmail").addEventListener("click", resetToEmail);
+
+      googleBtn.addEventListener("click", () => {
+        if (!currentEmail) return;
+        const rt = returnTo ? `&return_to=${encodeURIComponent(returnTo)}` : "";
+        window.location.href = `/api/v1/oauth/google/start?email=${encodeURIComponent(currentEmail)}${rt}`;
+      });
+
+      appleBtn.addEventListener("click", () => {
+        const rt = returnTo ? `&return_to=${encodeURIComponent(returnTo)}` : "";
+        const emailParam = currentEmail ? `email=${encodeURIComponent(currentEmail)}&` : "";
+        window.location.href = `/api/v1/oauth/apple/start?${emailParam}${rt.replace(/^&/, "")}`;
+      });
+
+      emailForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        clearMsg();
+
+        const email = (document.getElementById("email").value || "").trim().toLowerCase();
+        if (!email) return;
+
+        currentEmail = email;
+
+        try {
+          const res = await fetch(`/api/v1/auth/method?email=${encodeURIComponent(email)}`);
+          const data = await res.json();
+          if (!res.ok) {
+            throw new Error(data && data.detail ? data.detail : "Failed to detect auth method");
+          }
+
+          const methods = Array.isArray(data.methods) ? data.methods : [];
+          methodsEl.textContent = methods.join(", ") || "(none)";
+          emailForm.classList.add("hide");
+
+          const hasGoogle = methods.includes("google");
+          const hasPassword = methods.includes("cpanel_password");
+
+          googleBtn.classList.toggle("hide", !hasGoogle);
+          pwBox.classList.toggle("hide", !hasPassword);
+          choices.classList.remove("hide");
+
+          if (hasPassword) {
+            choices.classList.add("hide");
+            await preparePassword(email);
+          }
+        } catch (error) {
+          showErr(error && error.message ? error.message : "Error");
+        }
+      });
+
+      async function preparePassword(email) {
+        try {
+          const existsRes = await fetch(`/api/v1/cpanel/mailbox-exists?email=${encodeURIComponent(email)}`);
+          const existsData = await existsRes.json();
+          if (!existsRes.ok) {
+            throw new Error(existsData && existsData.detail ? existsData.detail : "Mailbox check failed");
+          }
+          if (!existsData.exists) {
+            throw new Error("Mailbox does not exist");
+          }
+
+          const statusRes = await fetch(`/api/v1/auth/password/status?email=${encodeURIComponent(email)}`);
+          const statusData = await statusRes.json();
+          if (!statusRes.ok) {
+            throw new Error(statusData && statusData.detail ? statusData.detail : "Password status check failed");
+          }
+
+          pwMode = statusData.has_password ? "login" : "create";
+          document.getElementById("pwLabel").textContent = pwMode === "create" ? "Create App Password" : "App Password";
+          document.getElementById("pwSubmit").textContent = pwMode === "create" ? "Create and Sign in" : "Sign in";
+          pwBox.classList.remove("hide");
+        } catch (error) {
+          showErr(error && error.message ? error.message : "Error");
+          resetToEmail();
+        }
+      }
+
+      document.getElementById("pwForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        clearMsg();
+
+        const password = document.getElementById("password").value || "";
+        if (!currentEmail || !password) return;
+
+        const endpoint = pwMode === "create" ? "/api/v1/auth/password/create" : "/api/v1/auth/password/login";
+
+        try {
+          const res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ email: currentEmail, password })
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            throw new Error(data && data.detail ? data.detail : "Password sign-in failed");
+          }
+
+          showOk("Signed in. Redirecting...");
+          window.location.href = returnTo || "/callback";
+        } catch (error) {
+          showErr(error && error.message ? error.message : "Error");
+        }
+      });
+    </script>
+  </body>
+</html>

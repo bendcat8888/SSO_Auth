@@ -1,0 +1,2 @@
+Put your logo file here as: favicon.png
+
