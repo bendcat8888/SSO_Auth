@@ -209,4 +209,10 @@ Usually indicates network-layer failure:
 
 ## License
 
-Internal use (set a license as needed).
+Copyright (c) 2026 InnoGen Pharmaceuticals Inc. All rights reserved.
+
+Author/Maintainer: Benedic Cater
+
+This software is proprietary and confidential. No part of this repository may be copied, modified, published, distributed, or used to create derivative works without prior written permission from InnoGen Pharmaceuticals Inc.
+
+For internal use only.
