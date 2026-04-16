@@ -67,18 +67,17 @@ The API will be available at `http://127.0.0.1:8520`.
 - **Cookie Protection:** Uses `SameSite=None` and `Secure` flags for cross-domain cookie transmission.
 - **State Verification:** Implements OAuth `state` parameters to prevent Cross-Site Request Forgery (CSRF).
 
+---
 
-## License
+## 📜 License & Intellectual Property
+**Copyright (c) 2026 Benedic Cater / InnoGen Pharmaceuticals Inc. (Solvang)**
 
-### Copyright (c) 2026 Benedic Cater / InnoGen Pharmaceuticals Inc.
+**All Rights Reserved.**
+This repository is published for **portfolio review and technical demonstration purposes only.**
 
-### All Rights Reserved.
+**Strict Restrictions:**
+- **No Reproduction:** No part of this code may be copied, modified, or distributed.
+- **Brand Protection:** Use of the "InnoGen" or "Solvang" name, branding, or logos is strictly prohibited.
+- **Data Privacy:** Use of any proprietary data or business logic contained herein for commercial or personal projects is strictly prohibited.
 
-This repository and its contents, including all code, assets, and data, are the sole property of the author. This code is made public for portfolio review and demonstration purposes only.
-
-### Restrictions:
-- You may not copy, modify, or distribute this code.
-- You may not use the "InnoGen" name, branding, or logos for any purpose.
-- Use of the data contained within this repository for commercial or personal projects is strictly prohibited.
-
-For inquiries or permission requests, please contact the author.
+_For professional inquiries or permission requests, please contact Benedic Cater._
