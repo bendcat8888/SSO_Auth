@@ -70,7 +70,7 @@ The API will be available at `http://127.0.0.1:8520`.
 ---
 
 ## 📜 License & Intellectual Property
-**Copyright (c) 2026 Benedic Cater / InnoGen Pharmaceuticals Inc. (Solvang)**
+**Copyright (c) 2026 Benedic Cater / InnoGen Pharmaceuticals Inc.**
 
 **All Rights Reserved.**
 This repository is published for **portfolio review and technical demonstration purposes only.**
